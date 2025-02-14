@@ -9,6 +9,7 @@ const authRoute = require("./Routes/AuthRoute");
 const planRoute = require("./Routes/PlanRoute");
 const userRoute = require("./Routes/UserRoute");
 
+
 mongoose
   .connect(MONGO_URL, {
     useNewUrlParser: true,
@@ -21,24 +22,23 @@ mongoose
     console.log(err);
   });
 
-app.listen(PORT, () => {
-  console.log(`Listening to PORT ${PORT}`);
-});
+
+app.use(cookieParser()); 
+app.use(express.json()); 
 
 app.use(
   cors({
-    origin: ["http://localhost:4000", "http://localhost:5173", "https://tiered-pricing-page-production.up.railway.app"],
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    credentials: true,
+    origin: ["http://localhost:5173","http://localhost:5174", "https://saas-frontend-sigma.vercel.app/"],
+    credentials: true, 
+    methods: ["GET", "POST", "PUT", "DELETE"], 
+    allowedHeaders: ["Content-Type", "Authorization"], 
   })
 );
 
-app.use(cookieParser());
-
-app.use(express.json());
-
 app.use("/", authRoute);
-
 app.use("/api", planRoute);
-
 app.use("/user", userRoute);
+
+app.listen(PORT, () => {
+  console.log(`Server running on PORT ${PORT}`);
+});
