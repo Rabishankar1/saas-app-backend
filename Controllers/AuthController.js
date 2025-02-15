@@ -21,8 +21,8 @@ module.exports.Signup = async (req, res, next) => {
     const token = createSecretToken(user._id);
     res.cookie("token", token, {
       httpOnly: true,
-      secure: true, 
-      sameSite: "None", 
+      secure: true,
+      sameSite: "None",
     });
     res
       .status(201)
@@ -30,6 +30,7 @@ module.exports.Signup = async (req, res, next) => {
     next();
   } catch (error) {
     console.error(error);
+    res.status(500).json({ message: "Error signing up user" });
   }
 };
 
@@ -50,9 +51,9 @@ module.exports.Login = async (req, res, next) => {
     }
     const token = createSecretToken(user._id);
     res.cookie("token", token, {
-      httpOnly: true,
-      secure: true, 
-      sameSite: "None", 
+      httpOnly: false,
+      secure: true,
+      sameSite: "None",
     });
     res
       .status(201)
@@ -60,5 +61,21 @@ module.exports.Login = async (req, res, next) => {
     next();
   } catch (error) {
     console.error(error);
+  }
+};
+
+module.exports.Logout = async (req, res, next) => {
+  try {
+    await res.clearCookie("token", {
+      httpOnly: true,
+      secure: true,
+      sameSite: "None",
+    });
+    console.log("Logout triggered");
+    res.status(200).json({ message: "User logged out successfully" });
+    next()
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error logging out user" });
   }
 };
