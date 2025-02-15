@@ -14,7 +14,7 @@ module.exports.Signup = async (req, res, next) => {
     }
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-      return res.json({ message: "User already exists" });
+      return res.status(400).json({ message: "User already exists" });
     }
     const user = await User.create({ email, password, username, createdAt });
 
@@ -73,7 +73,7 @@ module.exports.Logout = async (req, res, next) => {
     });
     console.log("Logout triggered");
     res.status(200).json({ message: "User logged out successfully" });
-    next()
+    next();
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Error logging out user" });
