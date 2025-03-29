@@ -34,6 +34,9 @@ app.use(
 );
 
 app.use("/", authRoute);
+app.get("/ping", (req, res) => {
+  res.status(200).json({ status: "ok", message: "Server is alive" });
+});
 app.use("/api", planRoute);
 app.use("/user", userRoute);
 
